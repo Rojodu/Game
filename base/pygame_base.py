@@ -1,43 +1,40 @@
 # Example file showing a circle moving on screen
+import sys
 import pygame
+from pygame.locals import *
 
 # pygame setup
-pygame.init()
-screen = pygame.display.set_mode((1280, 720))
-clock = pygame.time.Clock()
-running = True
-dt = 0
 
-player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+def main():
+    # Initialise screen
+    pygame.init()
+    screen = pygame.display.set_mode((150, 50))
+    pygame.display.set_caption('Basic Pygame program')
 
-while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    # Fill background
+    background = pygame.Surface(screen.get_size())
+    background = background.convert()
+    background.fill((250, 250, 250))
 
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("purple")
+    # Display some text
+    font = pygame.font.Font(None, 36)
+    text = font.render("Hello There", 1, (10, 10, 10))
+    textpos = text.get_rect()
+    textpos.centerx = background.get_rect().centerx
+    background.blit(text, textpos)
 
-    pygame.draw.circle(screen, "red", player_pos, 40)
-
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_w]:
-        player_pos.y -= 300 * dt
-    if keys[pygame.K_s]:
-        player_pos.y += 300 * dt
-    if keys[pygame.K_a]:
-        player_pos.x -= 300 * dt
-    if keys[pygame.K_d]:
-        player_pos.x += 300 * dt
-
-    # flip() the display to put your work on screen
+    # Blit everything to the screen
+    screen.blit(background, (0, 0))
     pygame.display.flip()
 
-    # limits FPS to 60
-    # dt is delta time in seconds since last frame, used for framerate-
-    # independent physics.
-    dt = clock.tick(60) / 1000
+    # Event loop
+    while True:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                return
 
-pygame.quit()
+        screen.blit(background, (0, 0))
+        pygame.display.flip()
+
+
+if __name__ == '__main__': main()
