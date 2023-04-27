@@ -8,8 +8,8 @@ win = pygame.display.set_mode((screenSize, screenSize-20))
 
 pygame.display.set_caption("First Game")
 
-walkRight = [img.load('R1.png'), img.load('R2.png'), img.load('R3.png'),img.load('R4.png'), img.load('R5.png'), img.load('R6.png'),img.load('R7.png'), img.load('R8.png'), img.load('R9.png')]
-walkLeftt = [img.load('L1.png'), img.load('L2.png'), img.load('L3.png'),img.load('L4.png'), img.load('L5.png'), img.load('L6.png'),img.load('L7.png'), img.load('L8.png'), img.load('L9.png')]
+walkRight = [img.load('R'+str(i+1)+'.png') for i in range(9)]
+walkLeft = [img.load('L'+str(i+1)+'.png') for i in range(9)]
 bg = img.load('bg.jpg')
 char = img.load('standing.png')
 
@@ -34,7 +34,7 @@ class player(object):
             self.walkCount = 0
         if not(self.standing):
             if self.left:
-                win.blit(walkLeftt[self.walkCount//3], (self.x,self.y))
+                win.blit(walkLeft[self.walkCount//3], (self.x,self.y))
                 self.walkCount+=1
             elif self.right:
                 win.blit(walkRight[self.walkCount//3], (self.x,self.y))
@@ -43,7 +43,7 @@ class player(object):
             if self.right:
                 win.blit(walkRight[0], (self.x, self.y))
             else:
-                win.blit(walkLeftt[0], (self.x, self.y))
+                win.blit(walkLeft[0], (self.x, self.y))
 
 class projectile(object):
     def __init__(self,x,y,radius,color,facing):
@@ -57,9 +57,50 @@ class projectile(object):
     def draw(self, win):
         pygame.draw.circle(win, self.color, (self.x, self.y), self.radius)
 
+class enemy(object):
+    walkRight = [img.load('R'+str(i+1)+'E.png') for i in range(11)]
+    walkLeft = [img.load('L'+str(i+1)+'E.png') for i in range(11)]
+
+    def __init__(self, x, y, width, height, end):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.end = end
+        self.path = [self.x, self.end]
+        self.walkCount = 0
+        self.vel = 3
+
+    def draw(self, win):
+        self.move()
+        if self.walkCount + 1 >= 33:
+            self.walkCount = 0
+
+        if self.vel > 0:
+            win.blit(self.walkRight[self.walkCount//3], (self.x, self.y))
+            self.walkCount += 1
+        else:
+            win.blit(self.walkLeft[self.walkCount//3], (self.x, self.y))
+            self.walkCount += 1
+
+    def move(self):
+        if self.vel > 0:
+            if self.x + self.vel < self.path[1]:
+                self.x += self.vel
+            else:
+                self.vel = self.vel * -1
+                self.walkCount = 0
+        else:
+            if self.x - self.vel > self.path[0]:
+                self.x += self.vel
+            else:
+                self.vel = self.vel * -1
+                self.walkCount = 0
+
 def redrawGameWindow():
     win.blit(bg, (0,0))
     man.draw(win)
+    goblin.draw(win)
     for bullet in bullets:
         bullet.draw(win)
 
@@ -68,6 +109,7 @@ def redrawGameWindow():
 
 # main loop
 man = player(300,410,64,64)
+goblin = enemy(100,410,64,64,450)
 bullets =[]
 run = True
 while run:
