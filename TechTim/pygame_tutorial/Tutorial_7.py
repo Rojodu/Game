@@ -8,17 +8,17 @@ win = pygame.display.set_mode((screenSize, screenSize-20))
 
 pygame.display.set_caption("First Game")
 
-walkRight = [img.load('R'+str(i+1)+'.png') for i in range(9)]
-walkLeft = [img.load('L'+str(i+1)+'.png') for i in range(9)]
-bg = img.load('bg.jpg')
-char = img.load('standing.png')
+walkRight = [img.load('TechTim\pygame_tutorial\R'+str(i+1)+'.png') for i in range(9)]
+walkLeft = [img.load('TechTim\pygame_tutorial\L'+str(i+1)+'.png') for i in range(9)]
+bg = img.load('TechTim/pygame_tutorial/bg.jpg')
+char = img.load('TechTim\pygame_tutorial\standing.png')
 
 clock = pygame.time.Clock()
 
-bulletSound = pygame.mixer.Sound('bullet.wav')
-hitSound = pygame.mixer.Sound('hit.wav')
+bulletSound = pygame.mixer.Sound('TechTim/pygame_tutorial/bullet.wav')
+hitSound = pygame.mixer.Sound('TechTim/pygame_tutorial/hit.wav')
 
-music = pygame.mixer.music.load('music.mp3')
+music = pygame.mixer.music.load('TechTim/pygame_tutorial/music.mp3')
 pygame.mixer.music.play(-1)
 
 score = 0
@@ -88,8 +88,8 @@ class projectile(object):
         pygame.draw.circle(win, self.color, (self.x, self.y), self.radius)
 
 class enemy(object):
-    walkRight = [img.load('R'+str(i+1)+'E.png') for i in range(11)]
-    walkLeft = [img.load('L'+str(i+1)+'E.png') for i in range(11)]
+    walkRight = [img.load('TechTim/pygame_tutorial/R'+str(i+1)+'E.png') for i in range(11)]
+    walkLeft = [img.load('TechTim/pygame_tutorial/L'+str(i+1)+'E.png') for i in range(11)]
 
     def __init__(self, x, y, width, height, end):
         self.x = x
